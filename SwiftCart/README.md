@@ -1,143 +1,25 @@
-## WELCOME TO ( সহজ সরল সিম্পল ) ASSIGNMENT (SwiftCart E-Commerce)
+## WELCOME TO ASSIGNMENT (SwiftCart E-Commerce) Questions and Answers.
 
 
-## Repository: Create your own public repository and submit the link.
-
----
-## 🛍️ API Endpoints
----
-1. Get 🛍️ All Products
-```bash
-https://fakestoreapi.com/products
-```
-
-2. Get 🛍️ All Categories
-```bash
-https://fakestoreapi.com/products/categories
-```
-
-3. Get 🛍️ Products by Category
-```bash
-https://fakestoreapi.com/products/category/${category}
-```
-
-Example:
-```bash
-https://fakestoreapi.com/products/category/jewelery
-```
-
-4. Get 🛍️ Single Product Detail
-```bash
-https://fakestoreapi.com/products/${id}
-```
-
-Example:
-```bash
-https://fakestoreapi.com/products/1
-```
-
----
-
-## 🎯 Project Specifications (UI/UX)
-
-#### 1) Navbar
-- Website **logo/name** ("SwiftCart") on the **left**
-- **Menu items** (Home, Products, About, Contact) in the **center**
-- **Cart Icon/Button** on the **right** (showing item count is a bonus)
-
-#### 2) Banner / Hero Section
-- A **background image** (related to shopping/fashion/electronics)
-- A **title** (e.g., "Best Collection For You") and **subtitle**
-- A **centered button** (e.g., "Shop Now")
-
-#### 3) Features / Why Choose Us
-- **Section heading**
-- **3-4 items** highlighting features like "Fast Delivery", "24/7 Support", "Secure Payment", etc. (Icon + Title + Short Text)
-
-#### 4) Trending / Top Rated Section
-- Show **3 top-rated products** (you can filter by rating or just pick the first 3) based on API data or hardcoded for layout practice.
-
-#### 5) Newsletter & Footer
-- **Newsletter Subscription Form**: Email input + Subscribe button.
-- **Footer** with copyright info, social links, and quick links.
-
-#### 6) Responsiveness
-- Website must be **mobile responsive** 
-
----
-#### 7) Create a README file to answer the following questions-
-
-> **⚠️ Warning:** Do not use any AI tools to answer these questions. You must write the answers in **Bangla**.
+##
 
 #### 1) What is the difference between `null` and `undefined`?
+###✅Undefined: যখন কোনো ভ্যারিয়েবল ডিক্লেয়ার করা হয় কিন্তু কোনো ভ্যালু অ্যাসাইন করা হয় না, তখন জাভাস্ক্রিপ্ট ডিফল্টভাবে তাকে undefined বলে।
+    Null: এটি একটি অ্যাসাইনমেন্ট ভ্যালু। যখন প্রোগ্রামার ইচ্ছাকৃতভাবে কোনো ভ্যারিয়েবলকে খালি বা "মান নেই" হিসেবে বোঝাতে চান, তখন null ব্যবহার করা হয়।
 
 #### 2) What is the use of the `map()` function in JavaScript? How is it different from `forEach()`?
+###✅map() একটি অ্যারের প্রতিটি উপাদানের ওপর কাজ করে এবং ফলাফল হিসেবে একটি নতুন অ্যারে রিটার্ন করে।
+    forEach() শুধু অ্যারের প্রতিটি উপাদানের ওপর কাজ করে এবং কোনো ফলাফল রিটার্ন করে না।
 
 #### 3) What is the difference between `==` and `===`?
+###✅== (Loose Equality): এটি শুধু মান (value) চেক করে, ডাটা টাইপ চেক করে না। (যেমন: 5 == "5" সত্য)।
+    === (Strict Equality): এটি মান এবং ডাটা টাইপ উভয়ই চেক করে। (যেমন: 5 === "5" মিথ্যা)।
 
 #### 4) What is the significance of `async`/`await` in fetching API data?
+###✅async/await জাভাস্ক্রিপ্টের অ্যাসিনক্রোনাস কাজগুলোকে আরও সহজ এবং রিডেবল করে তোলে। এটি প্রমিস (Promise) হ্যান্ডেল করার একটি আধুনিক উপায় যা কোডকে দেখতে সিঙ্ক্রোনাস কোডের মতো করে তোলে, ফলে এরর হ্যান্ডলিং সহজ হয়।
 
 #### 5) Explain the concept of Scope in JavaScript (Global, Function, Block).
+###✅Global Scope: ভ্যারিয়েবল যদি কোডের একদম শুরুতে ডিক্লেয়ার করা হয় এবং যেকোনো জায়গা থেকে অ্যাক্সেস করা যায়।
+    Function Scope: ভ্যারিয়েবল যদি কোনো ফাংশনের ভেতর ডিক্লেয়ার করা হয়, তবে তা শুধু ওই ফাংশনের ভেতরেই কাজ করবে।
+    Block Scope: let এবং const দিয়ে ডিক্লেয়ার করা ভ্যারিয়েবল শুধু নির্দিষ্ট সেকেন্ড ব্র্যাকেট { } (যেমন if বা for loop) এর ভেতর কাজ করে।
 
-## ⚡ Dynamic Features & Functionalities
-
-1) Category Loading
-Load Product Categories dynamically on the UI (e.g., as filter buttons or a dropdown).
-
-2) Category Click → Product Data
-On clicking a category: load products of that specific category.
-Display in a grid layout (e.g., 3 or 4 columns).
-
-3) Card Contents
-Each product card must include:
-- **Image** (from API)
-- **Title** (truncated if too long)
-- **Price** ($ value)
-- **Category** (badge or text)
-- **Rating** (Visualize stars or just show the number)
-- **Details Button**
-- **Add to Cart button**
-
-4) Modal on "Details" Click
-Clicking the "Details" button on a card opens a modal with full product details:
-- Full Title
-- Full Description
-- Price & Rating
-- "Buy Now" or "Add to Cart" button in modal.
-
-## 🧪 Challenges (Optional)
-
-    1) Add to Cart Interaction
-    Clicking "Add to Cart":
-    - Adds the product to a Cart list/array.
-    - Updates a Cart Count in the Navbar.
-    - (Optional) Persist in LocalStorage.
-
-    2) Cart Calculation
-    Show a summary (maybe in a sidebar or a separate section/modal) that lists added items and calculates the **Total Price**.
-
-    3) Remove from Cart
-    Ability to remove an item from the cart and update the Total Price instantly.
-
-    4) Loading Spinner
-    Show a loading spinner or skeleton loader while fetching data from the API.
-
-    5) Active State
-    Highlight the currently selected category button.
-
-🧰 Technology Stack:
-    HTML
-    CSS (Vanilla / Tailwind / DaisyUI)
-    JavaScript (Vanilla only, no frameworks like React/Vue for this assignment)
-
-📌 Rules
-✅ At least 5 meaningful commits
-❌ No dummy text where real data can be shown.
-
-## 🔗 Submission
-- **Live Link :** YOUR_DEPLOYED_URL_HERE
-- **GitHub Repository:** YOUR_REPO_URL_HERE
-
-
-### 📅 Deadline For 60 marks: 17th February, 2026 (11:59 pm ⏱️)
-- Note: There won't be any 50 or 30 marks submission deadline. Only 60 marks submission deadline. After 17th February, 2026 (11:59 pm ⏱️) no submission will be accepted.
