@@ -92,43 +92,31 @@ function fetchProducts(category) {
     fetch(url).then(res => res.json())
         .then(data => {
             state.products = data;
-            // show top 3 for trending
             renderProducts(data.slice(0, 3));
             showLoader(false);
         });
 }
 
-// Render Products
-// function renderProducts(products) {
-//     elements.productGrid.innerHTML = '';
-//     elements.productGrid.classList.remove('hidden');
+function fetchAllProducts(category) {
+    showLoader(true);
+    elements.productGrid.classList.add('hidden');
 
-//     products.forEach(product => {
-//         const card = document.createElement('div');
-//         card.className = 'bg-white rounded-xl shadow p-4 flex flex-col items-center hover:shadow-lg transition duration-300';
+    let url = 'https://fakestoreapi.com/products';
+    if (category && category !== 'All') {
+        url = `https://fakestoreapi.com/products/category/${category}`;
+    }
 
-//         // UPDATED: Icons instead of text for buttons
-//         card.innerHTML = `
-//                 <div class="h-40 w-full flex items-center justify-center mb-4">
-//                     <img src="${product.image}" class="max-h-full object-contain" alt="${product.title}">
-//                 </div>
-//                 <h3 class="font-semibold text-sm mb-2 line-clamp-1 h-5" title="${product.title}">${product.title}</h3>
-//                 <p class="text-indigo-600 font-bold mb-2">$${product.price}</p>
-//                 <span class="text-xs bg-gray-200 px-2 py-1 rounded text-gray-600 mb-2">${product.category}</span>
-//                 <p class="text-sm mb-3 text-yellow-500">⭐ ${product.rating.rate}</p>
-                
-//                 <div class="flex gap-2 w-full mt-auto">
-//                     <button onclick="showDetails(${product.id})" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded transition flex items-center justify-center" title="Details">
-//                         <i class="fa-solid fa-circle-info"></i>
-//                     </button>
-//                     <button onclick="addToCart(${product.id})" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded transition flex items-center justify-center" title="Add to Cart">
-//                         <i class="fa-solid fa-cart-plus"></i>
-//                     </button>
-//                 </div>
-//             `;
-//         elements.productGrid.appendChild(card);
-//     });
-// }
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            state.products = data;
+            renderProducts(data); 
+            showLoader(false);
+            elements.productGrid.classList.remove('hidden');
+        });
+}
+
+
 function renderProducts(products){
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
