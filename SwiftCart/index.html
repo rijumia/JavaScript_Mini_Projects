@@ -22,7 +22,7 @@
       <div class="flex justify-between h-16 items-center">
         <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
           <i class="fa-solid fa-cart-shopping text-indigo-600 text-2xl mr-2"></i>
-          <span class="font-bold text-2xl tracking-tight text-gray-900">SwiftCart</span>
+          <span class="font-bold text-2xl tracking-tight text-indigo-700">SwiftCart</span>
         </div>
         <!-- Desktop Menu -->
         <div class="hidden md:flex space-x-8 items-center" id="menuItems">
@@ -118,10 +118,13 @@
     </section>
 
   <!-- Trending Products -->
-  <section id="shop" class="py-16 bg-gray-50 min-h-screen">
+  <section id="shop" class="py-10 bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold text-left mb-6 text-gray-900">Trending Now</h2>
-      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 hidden"></div>
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 hidden">
+
+        
+      </div>
       <div id="loader" class="text-center py-10 hidden">
         <i class="fa-solid fa-spinner fa-spin text-4xl text-indigo-600"></i>
       </div>
@@ -171,11 +174,45 @@
     </div>
   </div>
 
+    <!-- Product Modal -->
+  <div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeModal()"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <div class="flex justify-between items-start">
+                <h3 class="text-2xl leading-6 font-bold text-gray-900" id="modalTitle">Product Title</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                  <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+              </div>
+              <div class="mt-4 flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/2">
+                  <img id="modalImage" src="" alt="Product" class="w-full h-64 object-contain bg-gray-100 rounded-lg p-4"/>
+                </div>
+                <div class="w-full md:w-1/2">
+                  <p class="text-sm text-indigo-600 font-semibold uppercase tracking-wide mb-2" id="modalCategory">Category</p>
+                  <p class="text-3xl font-bold text-gray-900 mb-2" id="modalPrice">$0.00</p>
+                  <div class="flex items-center mb-4 text-yellow-400" id="modalRating"></div>
+                  <p class="text-gray-600 text-sm mb-6 leading-relaxed" id="modalDesc">Description here...</p>
+                  <button onclick="addToCartFromModal()" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+
     <!-- FOOTER -->
   <footer class="bg-slate-900 text-gray-400 pt-20 pb-10 px-6 md:px-20 lg:px-40">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
       <div class="lg:col-span-1">
-        <h2 class="text-2xl font-bold text-white mb-6">SwiftCart</h2>
+        <h2 class="text-2xl font-bold text-indigo-700 mb-6">SwiftCart</h2>
         <p class="text-sm leading-relaxed opacity-70">Your one-stop shop for all your fashion and lifestyle needs. Quality products, fast delivery, and excellent support.</p>
       </div>
       <div>

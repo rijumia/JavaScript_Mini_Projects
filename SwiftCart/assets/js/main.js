@@ -3,7 +3,8 @@
 // ==========================
 const state = {
     products: [],
-    cart: JSON.parse(localStorage.getItem("cart")) || []
+    cart: JSON.parse(localStorage.getItem("cart")) || [],
+    activeCategory: "All"
 };
 
 // ==========================
@@ -12,6 +13,7 @@ const state = {
 const elements = {
     productGrid: document.getElementById("productGrid") || document.getElementById("allProductGrid"),
     loader: document.getElementById("loader"),
+    categoryContainer: document.getElementById("categoryContainer"),
 
     cartCount: document.getElementById("cartCount"),
     cartSidebar: document.getElementById("cartSidebar"),
@@ -38,8 +40,11 @@ function showLoader(show) {
 // ==========================
 // FETCH PRODUCTS
 // ==========================
-function fetchProducts(category) {
+function fetchProducts(category = "All") {
     if (!elements.productGrid) return;
+
+    state.activeCategory = category;
+    highlightCategory();
 
     showLoader(true);
     elements.productGrid.classList.add("hidden");
@@ -52,7 +57,7 @@ function fetchProducts(category) {
         .then(data => {
             state.products = data;
 
-            // Index page shows 3 products only
+            // Index page shows only 3 products
             if (document.getElementById("productGrid")) {
                 renderProducts(data.slice(0, 3));
             } else {
@@ -98,6 +103,24 @@ function renderProducts(products) {
             </div>
         `;
         grid.appendChild(card);
+    });
+}
+
+// ==========================
+// CATEGORY BUTTON HIGHLIGHT
+// ==========================
+function highlightCategory() {
+    if (!elements.categoryContainer) return;
+
+    const buttons = elements.categoryContainer.querySelectorAll(".category-btn");
+    buttons.forEach(btn => {
+        if (btn.textContent.toLowerCase() === state.activeCategory.toLowerCase()) {
+            btn.classList.add("bg-indigo-600", "text-white");
+            btn.classList.remove("bg-gray-200", "text-gray-800");
+        } else {
+            btn.classList.add("bg-gray-200", "text-gray-800");
+            btn.classList.remove("bg-indigo-600", "text-white");
+        }
     });
 }
 
@@ -227,7 +250,7 @@ function highlightNav() {
 // INIT
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
-    fetchProducts();
-    updateCartUI();
-    highlightNav();
+    fetchProducts();      
+    updateCartUI();       
+    highlightNav();      
 });
