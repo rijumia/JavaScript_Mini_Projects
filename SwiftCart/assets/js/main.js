@@ -1,124 +1,79 @@
+// ==========================
+// STATE
+// ==========================
 const state = {
     products: [],
-    cart: [],
-    categories: [],
-    currentModalProductId: null
+    cart: JSON.parse(localStorage.getItem("cart")) || []
 };
 
+// ==========================
+// ELEMENTS
+// ==========================
 const elements = {
-    productGrid: document.getElementById('productGrid'),
-    categoryContainer: document.getElementById('categoryContainer'),
-    loader: document.getElementById('loader'),
-    cartCount: document.getElementById('cartCount'),
-    cartSidebar: document.getElementById('cartSidebar'),
-    cartItemsContainer: document.getElementById('cartItemsContainer'),
-    cartTotal: document.getElementById('cartTotal'),
-    // Modal Elements
-    modal: document.getElementById('productModal'),
-    mTitle: document.getElementById('modalTitle'),
-    mImage: document.getElementById('modalImage'),
-    mCategory: document.getElementById('modalCategory'),
-    mPrice: document.getElementById('modalPrice'),
-    mRating: document.getElementById('modalRating'),
-    mDesc: document.getElementById('modalDesc')
+    productGrid: document.getElementById("productGrid") || document.getElementById("allProductGrid"),
+    loader: document.getElementById("loader"),
+
+    cartCount: document.getElementById("cartCount"),
+    cartSidebar: document.getElementById("cartSidebar"),
+    cartItemsContainer: document.getElementById("cartItemsContainer"),
+    cartTotal: document.getElementById("cartTotal"),
+
+    modal: document.getElementById("productModal"),
+    mTitle: document.getElementById("modalTitle"),
+    mImage: document.getElementById("modalImage"),
+    mCategory: document.getElementById("modalCategory"),
+    mPrice: document.getElementById("modalPrice"),
+    mRating: document.getElementById("modalRating"),
+    mDesc: document.getElementById("modalDesc")
 };
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    fetchCategories();
-    fetchProducts();
-    highlightNav();
-});
-
-// Navbar highlight
-function highlightNav() {
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(link => {
-        if (link.getAttribute('href') === '#' + location.hash.slice(1)) {
-            link.classList.add('text-indigo-600');
-        }
-    });
+// ==========================
+// LOADER
+// ==========================
+function showLoader(show) {
+    if (!elements.loader) return;
+    elements.loader.classList.toggle("hidden", !show);
 }
 
-// Fetch Categories
-function fetchCategories() {
-    fetch('https://fakestoreapi.com/products/categories')
-        .then(res => res.json())
-        .then(data => {
-            state.categories = data;
-            renderCategories(data);
-        });
-}
-
-function renderCategories(categories) {
-    // Note: The HTML structure for categoryContainer wasn't in the provided HTML, 
-    // so this function won't render anything visible unless you add the container div.
-    // Kept for logic consistency.
-    if (!elements.categoryContainer) return;
-
-    elements.categoryContainer.innerHTML = '';
-    const allBtn = document.createElement('button');
-    allBtn.textContent = 'All';
-    allBtn.className = 'px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white';
-    allBtn.onclick = () => { fetchProducts(); setActiveCategory(allBtn); }
-    elements.categoryContainer.appendChild(allBtn);
-
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-        btn.className = 'px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white';
-        btn.onclick = () => { fetchProducts(cat); setActiveCategory(btn); }
-        elements.categoryContainer.appendChild(btn);
-    });
-}
-
-// Active Category
-function setActiveCategory(button) {
-    if (!elements.categoryContainer) return;
-    document.querySelectorAll('#categoryContainer button').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white');
-        btn.classList.add('bg-white', 'text-gray-700');
-    });
-    button.classList.add('bg-indigo-600', 'text-white');
-}
-
-// Fetch Products
+// ==========================
+// FETCH PRODUCTS
+// ==========================
 function fetchProducts(category) {
+    if (!elements.productGrid) return;
+
     showLoader(true);
-    elements.productGrid.classList.add('hidden');
-    let url = 'https://fakestoreapi.com/products';
-    if (category && category !== 'All') url = `https://fakestoreapi.com/products/category/${category}`;
+    elements.productGrid.classList.add("hidden");
 
-    fetch(url).then(res => res.json())
-        .then(data => {
-            state.products = data;
-            renderProducts(data.slice(0, 3));
-            showLoader(false);
-        });
-}
-
-function fetchAllProducts(category) {
-    showLoader(true);
-    elements.productGrid.classList.add('hidden');
-
-    let url = 'https://fakestoreapi.com/products';
-    if (category && category !== 'All') {
-        url = `https://fakestoreapi.com/products/category/${category}`;
-    }
+    let url = "https://fakestoreapi.com/products";
+    if (category && category !== "All") url = `https://fakestoreapi.com/products/category/${category}`;
 
     fetch(url)
         .then(res => res.json())
         .then(data => {
             state.products = data;
-            renderProducts(data); 
+
+            // Index page shows 3 products only
+            if (document.getElementById("productGrid")) {
+                renderProducts(data.slice(0, 3));
+            } else {
+                renderProducts(data);
+            }
+
             showLoader(false);
-            elements.productGrid.classList.remove('hidden');
+        })
+        .catch(err => {
+            console.error("Error fetching products:", err);
+            showLoader(false);
         });
 }
 
+// ==========================
+// RENDER PRODUCTS
+// ==========================
+function renderProducts(products) {
+    const grid = elements.productGrid;
+    if (!grid) return;
 
-function renderProducts(products){
-    const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
     grid.classList.remove('hidden');
 
@@ -136,7 +91,6 @@ function renderProducts(products){
             <h3 class="text-sm font-semibold mb-1 line-clamp-2">${product.title}</h3>
             <div class="flex items-center justify-between mb-3">
                 <p class="text-indigo-600 font-bold text-base">$${product.price}</p>
-                
             </div>
             <div class="flex gap-2 mt-auto">
                 <button onclick="showDetails(${product.id})" class="flex-1 border border-gray-300 rounded py-2 text-sm hover:bg-gray-100 transition"><i class="fa-solid fa-eye m-1"></i>Details</button>
@@ -147,104 +101,133 @@ function renderProducts(products){
     });
 }
 
-// Loader
-function showLoader(show) {
-    elements.loader.classList.toggle('hidden', !show);
-}
-
-// --- MODAL LOGIC ---
+// ==========================
+// MODAL
+// ==========================
 function showDetails(id) {
-    fetch(`https://fakestoreapi.com/products/${id}`)
-        .then(res => res.json())
-        .then(product => {
-            state.currentModalProductId = product.id;
+    const product = state.products.find(p => p.id === id);
+    if (!product || !elements.modal) return;
 
-            elements.mTitle.innerText = product.title;
-            elements.mImage.src = product.image;
-            elements.mCategory.innerText = product.category;
-            elements.mPrice.innerText = '$' + product.price;
-            elements.mDesc.innerText = product.description;
+    elements.mTitle.textContent = product.title;
+    elements.mImage.src = product.image;
+    elements.mCategory.textContent = product.category;
+    elements.mPrice.textContent = `$${product.price}`;
+    elements.mRating.innerHTML = `⭐ ${product.rating.rate}`;
+    elements.mDesc.textContent = product.description;
 
-            // Generate Stars
-            let stars = '';
-            for (let i = 0; i < 5; i++) {
-                if (i < Math.round(product.rating.rate)) stars += '<i class="fa-solid fa-star"></i>';
-                else stars += '<i class="fa-regular fa-star"></i>';
-            }
-            elements.mRating.innerHTML = stars + ` <span class="text-gray-500 text-sm ml-2">(${product.rating.count})</span>`;
-
-            elements.modal.classList.remove('hidden');
-        });
+    elements.modal.classList.remove("hidden");
 }
 
 function closeModal() {
-    elements.modal.classList.add('hidden');
+    if (!elements.modal) return;
+    elements.modal.classList.add("hidden");
 }
 
 function addToCartFromModal() {
-    if (state.currentModalProductId) {
-        addToCart(state.currentModalProductId);
+    const title = elements.mTitle.textContent;
+    const product = state.products.find(p => p.title === title);
+    if (product) {
+        addToCart(product.id);
         closeModal();
     }
 }
 
-// --- CART LOGIC ---
-function toggleCart() {
-    elements.cartSidebar.classList.toggle('hidden');
-}
-
+// ==========================
+// CART
+// ==========================
 function addToCart(id) {
-    // Check if already in cart
-    const existing = state.cart.find(p => p.id === id);
+    const product = state.products.find(p => p.id === id);
+    if (!product) return;
+
+    const existing = state.cart.find(item => item.id === id);
     if (existing) {
-        alert("This item is already in your cart!");
-        return;
+        existing.qty += 1;
+    } else {
+        state.cart.push({ ...product, qty: 1 });
     }
 
-    fetch(`https://fakestoreapi.com/products/${id}`)
-        .then(res => res.json())
-        .then(product => {
-            state.cart.push(product);
-            updateCart();
-        });
+    saveCart();
+    updateCartUI();
 }
 
-function updateCart() {
-    const cart = state.cart;
-    elements.cartCount.textContent = cart.length;
-    elements.cartCount.classList.add('opacity-100');
+function removeFromCart(id) {
+    state.cart = state.cart.filter(item => item.id !== id);
+    saveCart();
+    updateCartUI();
+}
 
-    if (cart.length === 0) {
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(state.cart));
+}
+
+function updateCartUI() {
+    if (!elements.cartItemsContainer) return;
+
+    elements.cartItemsContainer.innerHTML = "";
+
+    if (state.cart.length === 0) {
         elements.cartItemsContainer.innerHTML = `<li class="py-6 flex flex-col items-center justify-center h-64 text-gray-500">
-                <i class="fa-solid fa-basket-shopping text-4xl mb-4"></i>
-                <p>Your cart is empty.</p>
-            </li>`;
-        elements.cartTotal.textContent = '$0.00';
-        return;
+            <i class="fa-solid fa-basket-shopping text-4xl mb-4"></i>
+            <p>Your cart is empty.</p>
+        </li>`;
     }
 
-    elements.cartItemsContainer.innerHTML = '';
     let total = 0;
 
-    cart.forEach((item, index) => {
-        total += item.price;
-        const li = document.createElement('li');
-        li.className = 'py-6 flex items-center justify-between';
-        li.innerHTML = `
-                <img src="${item.image}" class="h-16 w-16 object-contain rounded mr-4 border p-1">
-                <div class="flex-1">
-                    <h4 class="font-semibold text-sm text-gray-800">${item.title.substring(0, 30)}...</h4>
-                    <p class="text-indigo-600 font-bold text-sm">$${item.price}</p>
-                </div>
-                <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash"></i></button>
-            `;
-        elements.cartItemsContainer.appendChild(li);
+    state.cart.forEach(item => {
+        total += item.price * item.qty;
+
+        const div = document.createElement("div");
+        div.className = "flex justify-between items-center mb-3";
+
+        div.innerHTML = `
+            <div>
+                <p class="text-sm font-semibold">${item.title}</p>
+                <p class="text-xs text-gray-500">Qty: ${item.qty}</p>
+            </div>
+            <div class="flex gap-2 items-center">
+                <p class="text-sm font-bold">$${(item.price * item.qty).toFixed(2)}</p>
+                <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        `;
+
+        elements.cartItemsContainer.appendChild(div);
     });
 
-    elements.cartTotal.textContent = '$' + total.toFixed(2);
+    if (elements.cartTotal) elements.cartTotal.textContent = `$${total.toFixed(2)}`;
+    if (elements.cartCount) elements.cartCount.textContent = state.cart.reduce((a, b) => a + b.qty, 0);
+
+    if (elements.cartCount) {
+        elements.cartCount.classList.toggle("opacity-0", state.cart.length === 0);
+    }
 }
 
-function removeFromCart(index) {
-    state.cart.splice(index, 1);
-    updateCart();
+function toggleCart() {
+    if (!elements.cartSidebar) return;
+    elements.cartSidebar.classList.toggle("hidden");
 }
+
+// ==========================
+// NAV HIGHLIGHT
+// ==========================
+function highlightNav() {
+    const links = document.querySelectorAll(".nav-link");
+    links.forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add("text-indigo-600");
+            link.classList.remove("text-gray-600");
+        } else {
+            link.classList.add("text-gray-600");
+            link.classList.remove("text-indigo-600");
+        }
+    });
+}
+
+// ==========================
+// INIT
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+    fetchProducts();
+    updateCartUI();
+    highlightNav();
+});
